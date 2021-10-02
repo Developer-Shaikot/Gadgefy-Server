@@ -57,6 +57,14 @@ client.connect(err => {
   })
 
 
+  app.delete('/deleteCamera/:id', (req, res) =>{
+    cameraCollection.deleteOne({_id: ObjectId(req.params.id)})
+    .then( result => {
+      res.send(result.deletedCount > 0);
+    })
+  })
+
+
   app.post('/addCamera',(req,res)=>{
     newCameras = req.body;
     console.log(newCameras);
