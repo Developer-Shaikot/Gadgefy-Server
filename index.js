@@ -57,12 +57,6 @@ client.connect(err => {
   })
 
 
-  app.delete('/deleteCamera/:id', (req, res) =>{
-    cameraCollection.deleteOne({_id: ObjectId(req.params.id)})
-    .then( result => {
-      res.send(result.deletedCount > 0);
-    })
-  })
 
 
   app.post('/addCamera',(req,res)=>{
@@ -75,6 +69,17 @@ client.connect(err => {
       })
   })
 
+
+  app.delete('/deleteCamera/:id', (req, res) => {
+    const id =ObjectID(req.params.id);
+    console.log(id);
+    cameraCollection.findOneAndDelete({_id:id})
+    .then(documents => {
+        console.log('documents deleted',documents);
+        res.send(!! documents.value);
+    })
+
+})
 
   //   client.close();
 });
