@@ -50,13 +50,20 @@ client.connect(err => {
 
 
   app.get('/addCamera/:id', (req, res) => {
-    cameraCollection.find({ _id: ObjectId(req.params.id) })
-      .toArray((error, items) => {
-        res.send(items)
-      })
+    const id = ObjectID(req.params.id);
+    console.log('delete this', id);
+    cameraCollection.findOneAndDelete({_id: id})
+    .then(documents => res.send(document))
+})
+
+
+  app.delete('/deleteCamera/:id', (req, res) =>{
+    console.log(req.params.id);
+    cameraCollection.deleteOne({_id: ObjectId(req.params.id)})
+    .then( result => {
+      res.send(result.deletedCount > 0);
+    })
   })
-
-
 
 
   app.post('/addCamera',(req,res)=>{
@@ -70,16 +77,9 @@ client.connect(err => {
   })
 
 
-  app.delete('/deleteCamera/:id', (req, res) => {
-    const id =ObjectID(req.params.id);
-    console.log(id);
-    cameraCollection.findOneAndDelete({_id:id})
-    .then(documents => {
-        console.log('documents deleted',documents);
-        res.send(!! documents.value);
-    })
 
-})
+
+ 
 
   //   client.close();
 });
