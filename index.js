@@ -29,6 +29,7 @@ client.connect(err => {
   const cameraCollection = client.db("gadgefy").collection("camera");
   // perform actions on the collection object
 
+
   app.get('/addCameras', (req, res) => {
     cameraCollection.find()
       .toArray((error, items) => {
@@ -38,27 +39,19 @@ client.connect(err => {
 
 
 
-  app.post('/addCameras', (req, res) => {
-    newCameras = req.body;
-    console.log(newCameras);
-    cameraCollection.insertOne(newCameras)
-      .then(result => {
-        console.log('inserted count', result.insertedCount)
-        res.send(result.insertedCount > 0)
+
+
+
+  app.get('/addCamera/:id', (req, res) =>{
+    cameraCollection.find({ _id: ObjectId(req.params.id) })
+      .toArray((error, items) => {
+        res.send(items)
       })
   })
 
 
-  app.get('/addCamera/:id', (req, res) => {
-    const id = ObjectID(req.params.id);
-    console.log('delete this', id);
-    cameraCollection.findOneAndDelete({_id: id})
-    .then(documents => res.send(document))
-})
-
 
   app.delete('/deleteCamera/:id', (req, res) =>{
-    console.log(req.params.id);
     cameraCollection.deleteOne({_id: ObjectId(req.params.id)})
     .then( result => {
       res.send(result.deletedCount > 0);
@@ -66,9 +59,9 @@ client.connect(err => {
   })
 
 
-  app.post('/addCamera',(req,res)=>{
-    newCameras = req.body;
-    console.log(newCameras);
+  app.post('/addCameras', (req, res) => {
+    const newCameras = req.body;
+    console.log('adding new cameras',newCameras);
     cameraCollection.insertOne(newCameras)
       .then(result => {
         console.log('inserted count', result.insertedCount)
@@ -76,10 +69,6 @@ client.connect(err => {
       })
   })
 
-
-
-
- 
 
   //   client.close();
 });
