@@ -29,6 +29,7 @@ client.connect(err => {
 
   const cameraCollection = client.db("gadgefy").collection("camera");
   const adminCollection = client.db("gadgefy").collection("admin");
+  const sellCameraCollection = client.db("gadgefy").collection("sellCamera");
   // perform actions on the collection object
 
 
@@ -100,6 +101,23 @@ app.post('/isAdmin',(req,res)=>{
       })
   })
 
+
+  app.get('/sellCameras', (req, res) => {
+    sellCameraCollection.find()
+      .toArray((error, contents) => {
+        res.send(contents)
+      })
+  })
+
+  app.post('/sellCameras', (req, res) => {
+    const newSellCameras = req.body;
+    console.log('selling new cameras',newSellCameras);
+    sellCameraCollection.insertOne(newSellCameras)
+      .then(result => {
+        console.log('inserted count', result.insertedCount)
+        res.send(result.insertedCount > 0)
+      })
+  })
 
   //   client.close();
 });
