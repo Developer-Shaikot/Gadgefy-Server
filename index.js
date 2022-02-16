@@ -19,15 +19,18 @@ app.get('/', (req, res) => {
 })
 
 
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.sjzaj.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ifp7e.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 console.log(uri);
+
+
+
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
   console.log('connection error: ', err)
 
-  const cameraCollection = client.db("gadgefy").collection("camera");
+  const cameraCollection = client.db("gadgefy").collection("CameraData");
   const adminCollection = client.db("gadgefy").collection("admin");
   const sellCameraCollection = client.db("gadgefy").collection("sellCamera");
   const getValueCollection = client.db("gadgefy").collection("getValue");
